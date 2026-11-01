@@ -1,0 +1,6 @@
+out/
+build/
+shots/
+*.ppm
+.vs/
+CMakeUserPresets.json

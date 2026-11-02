@@ -1,4 +1,3 @@
-// CREWN - the circuit: closed spline centerline + position queries
 #pragma once
 #include "util.h"
 

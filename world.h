@@ -1,10 +1,9 @@
-// CREWN - builds all static geometry into OpenGL display lists (fixed-function, low-poly, 2001 style)
 #pragma once
 #include "gfx.h"
 #include "textures.h"
 #include "track.h"
 
-// dusk palette -------------------------------------------------------------
+// dusk palette
 inline Col horizonCol() { return Col(0.86f, 0.55f, 0.42f, 1); }
 inline V3 sunDir() { return norm3(V3(-0.55f, 0.26f, 0.50f)); }
 
@@ -133,7 +132,7 @@ public:
     std::vector<float> minimapX, minimapZ;
     int startIdx = 0;
 
-    // --------------------------------------------------------------- textures
+    //textures
     void makeTexturesA() {
         auto up = [](const Img& im, bool mip, bool repeat, bool lin) { return uploadTexture(im.d, im.w, im.h, mip, repeat, lin); };
         tx.asphalt = up(tex::asphalt(), true, true, false);
@@ -160,7 +159,7 @@ public:
         tx.white = up(w, false, true, false);
     }
 
-    // --------------------------------------------------------------- track
+    //track
     void makeTrack() {
         track.build();
         for (int i = 0; i < track.N(); i += 3) { minimapX.push_back(track.p[i].x); minimapZ.push_back(track.p[i].z); }
@@ -175,7 +174,7 @@ public:
         return std::sqrt(best);
     }
 
-    // --------------------------------------------------------------- ground, road, rails
+    // ground, road, rails
     void makeRoad() {
         const Track& T = track;
         const int N = T.N();
@@ -307,7 +306,7 @@ public:
         glEndList();
     }
 
-    // --------------------------------------------------------------- scenery
+    // sscenery
     void makeScenery() {
         const Track& T = track;
         const int N = T.N();
@@ -317,7 +316,7 @@ public:
         struct Disc { float x, z, r; };
         std::vector<Disc> keepOut;
 
-        // big structures -------------------------------------------------
+        // big structures / pl3
         L_scene = glGenLists(1);
         L_shadows = glGenLists(1);
         std::vector<std::pair<V3, V3>> bshadows;  // centre, half extents (unused rotation) for blob shadows
@@ -427,7 +426,7 @@ public:
                 bshadows.push_back({V3(h.x, 0, h.z), V3(h.w * 0.7f, 0, h.d * 0.7f)});
             }
 
-            // street lamps behind the guard rails --------------------------
+            // street lamps behind the guard rails
             lamps.clear();
             int lampStep = 10;
             for (int i = 3; i < N; i += lampStep) {
@@ -444,7 +443,7 @@ public:
                 lamps.push_back({V3(ax, 8.65f, az)});
             }
 
-            // trees -------------------------------------------------------
+            // trees
             for (int attempt = 0; attempt < 9000 && (int)trees.size() < 1250; attempt++) {
                 float x = rng.r(T.minX - 160, T.maxX + 160), z = rng.r(T.minZ - 160, T.maxZ + 160);
                 float d = distToTrack(x, z);
@@ -522,7 +521,7 @@ public:
         glEndList();
     }
 
-    // --------------------------------------------------------------- sky
+    // sky
     void makeSky() {
         L_sky = glGenLists(1);
         glNewList(L_sky, GL_COMPILE);
@@ -585,7 +584,7 @@ public:
         glEndList();
     }
 
-    // --------------------------------------------------------------- the car
+    // the car
     // lofted body made of cross sections; front is +Z
     static void loft(const CarSec* s, int n, const Col& c, bool topOnly = false, float topHW = -1.f, float dy = 0.f, bool caps = true) {
         setCol(c);

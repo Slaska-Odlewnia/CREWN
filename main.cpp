@@ -11,9 +11,7 @@
 // "Śląska Odlewnia" as explicit UTF-8 bytes so the source encoding of the compiler can never break it
 static const char* STUDIO = "\xC5\x9A" "l" "\xC4\x85" "ska Odlewnia";
 
-// ---------------------------------------------------------------------------
 // settings
-// ---------------------------------------------------------------------------
 struct Settings {
     int master = 8, music = 7, sfx = 8;
     bool fullscreen = false;
@@ -50,9 +48,7 @@ static void saveSettings(const Settings& s) {
     std::fclose(f);
 }
 
-// ---------------------------------------------------------------------------
 // game types
-// ---------------------------------------------------------------------------
 enum Scene { SC_SPLASH, SC_TITLE, SC_MENU, SC_OPTIONS, SC_CREDITS, SC_RACE };
 enum RacePhase { RP_COUNTDOWN, RP_RACING, RP_FINISHED };
 
@@ -89,9 +85,7 @@ struct Menu {
 
 struct Spark { float x, y, vx, vy, life, max; };
 
-// ---------------------------------------------------------------------------
 // the game
-// ---------------------------------------------------------------------------
 class Game {
 public:
     SDL_Window* win = nullptr;
@@ -141,8 +135,7 @@ public:
     bool autopilotOn = false;
     int lastCountdown = 99;
     double timeNow = 0;
-
-    // ------------------------------------------------------------------ init
+    // init  ! init 
     bool init(int argc, char** argv) {
         for (int i = 1; i < argc; i++) {
             std::string a = argv[i];
@@ -232,7 +225,7 @@ public:
     }
     float loadProgress() const { return loaded ? 1.f : (float)loadDone / (float)loadSteps.size(); }
 
-    // ------------------------------------------------------------------ menus
+    //menus
     void sfx(SfxType t, float a = 1.f) { audio.play(t, a); }
 
     static std::string volStr(int v) { return std::to_string(v * 10) + "%"; }
@@ -308,7 +301,7 @@ public:
         startRace();
     }
 
-    // menu input ------------------------------------------------------------
+    // menu input
     bool menuKey(Menu& m, SDL_Keycode k) {
         int n = (int)m.items.size();
         switch (k) {
@@ -344,7 +337,7 @@ public:
         return nullptr;
     }
 
-    // ------------------------------------------------------------------ events
+    //  events
     void handleEvent(const SDL_Event& e) {
         if (e.type == SDL_QUIT) { running = false; return; }
         float scx = 1, scy = 1;
@@ -393,7 +386,7 @@ public:
         else if (k == SDLK_t && phase == RP_RACING) resetOnTrack();
     }
 
-    // ------------------------------------------------------------------ race setup
+    //  race setup
     void startRace() {
         totalLaps = set.laps;
         const Track& T = world.track;
@@ -423,7 +416,7 @@ public:
         sfx(SFX_MOVE);
     }
 
-    // ------------------------------------------------------------------ driving physics
+    //  driving physics
     void readInput() {
         const Uint8* ks = SDL_GetKeyboardState(nullptr);
         in.throttle = (ks[SDL_SCANCODE_W] || ks[SDL_SCANCODE_UP]) ? 1.f : 0.f;
@@ -642,7 +635,7 @@ public:
         }
     }
 
-    // ------------------------------------------------------------------ race flow
+    //  race flow
     void showMsg(const std::string& m, const Col& c, float t = 2.6f) { msg = m; msgCol = c; msgT = t; }
 
     void updateRace(float dt) {
@@ -699,7 +692,7 @@ public:
         resultsMenu.sel = 0;
     }
 
-    // ------------------------------------------------------------------ update
+    //  update
     void update(float dt) {
         timeNow += dt;
         sceneT += dt;
@@ -952,7 +945,7 @@ public:
         if (retro) blitLowRes(vw, vh);
     }
 
-    // ------------------------------------------------------------------ retro presentation
+    //  retro presentation
     // 1) the low-res 3D image is copied into lowTex and drawn pixel-exact (x2) into the 640x360 frame,
     // 2) the HUD is drawn on top at that frame size,
     // 3) the whole frame is read back, snapped to a 6x7x6 (252 colour) palette with an ordered dither
@@ -1034,7 +1027,7 @@ public:
         fullscreenQuad(iw / 1024.f, ih / 512.f);
     }
 
-    // ------------------------------------------------------------------ cameras
+    //  cameras
     void raceCamera(float dt, V3& eye, V3& target) {
         Car& c = car;
         float spd = c.speed();
@@ -1068,7 +1061,7 @@ public:
         (void)T;
     }
 
-    // ------------------------------------------------------------------ frame render
+    //  frame render
     void render() {
         int dw, dh;
         SDL_GL_GetDrawableSize(win, &dw, &dh);
@@ -1123,7 +1116,7 @@ public:
     }
     bool menuCarReady = false;
 
-    // ------------------------------------------------------------------ 2D: logo, menus
+    //  2D: logo, menus
     void drawLogo(float x, float y, float scale) {
         const std::string t = "CREWN";
         float sh = 0.18f;
@@ -1228,7 +1221,7 @@ public:
         if (std::fmod((float)timeNow, 1.2f) < 0.8f) font.drawCentered(cx, py + ph - 16, "PRESS ANY KEY", 1.f, Col(1, 0.8f, 0.4f));
     }
 
-    // ------------------------------------------------------------------ splash screen
+    //  splash screen
     void renderSplash() {
         float W, H;
         begin2D(view);
@@ -1326,7 +1319,7 @@ public:
         // Note: the studio screen deliberately says nothing else; all other game text is English.
     }
 
-    // ------------------------------------------------------------------ HUD
+    //  HUD
     void drawSpeedo(float cx, float cy, float r) {
         float kmh = car.speed() * 3.6f;
         if (car.fwdSpeed() < -0.5f) kmh = car.speed() * 3.6f;
@@ -1500,7 +1493,7 @@ public:
         drawMenu(resultsMenu, px + 60, y, pw - 120, 28.f, 2.f, true);
     }
 
-    // ------------------------------------------------------------------ main loop + selftest
+    //  main loop + selftest
     void saveShot(const std::string& name) {
         int w, h; SDL_GL_GetDrawableSize(win, &w, &h);
         std::vector<uint8_t> px((size_t)w * h * 3), fl((size_t)w * h * 3);

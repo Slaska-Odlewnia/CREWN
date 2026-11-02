@@ -1,5 +1,3 @@
-// CREWN - fully procedural audio: engine, tyres, collisions, UI sounds and a sequenced menu track.
-// The Synth class has no SDL dependency (so it can be tested offline); Audio wraps it in an SDL device.
 #pragma once
 #include "util.h"
 
@@ -57,7 +55,7 @@ public:
         const float vol = p.master;
         for (int i = 0; i < frames; i++) {
             float L = 0, R = 0;
-            // ---------------- race ambience ----------------
+            // race ambience
             float eg = p.engine ? 1.f : 0.f;
             engGain += (eg - engGain) * 0.0008f;
             if (engGain > 0.001f) {
@@ -98,12 +96,12 @@ public:
                 float amb = (eng + tyre * 0.32f + wind * 0.5f + rough * 0.5f + sc * 0.5f + br + brq) * engGain * p.sfxVol;
                 L += amb; R += amb;
             }
-            // ---------------- one-shot sfx ----------------
+            // one-shot sfx
             float sfx = 0;
             for (auto& v : voices) if (v.on) sfx += voice(v, dt);
             sfx *= p.sfxVol;
             L += sfx; R += sfx;
-            // ---------------- music ----------------
+            // --music 
             float mg = p.music ? 1.f : 0.f;
             musicGain += (mg - musicGain) * 0.0004f;
             if (musicGain > 0.001f) {
@@ -209,7 +207,7 @@ private:
     }
     float colLP = 0;
 
-    // ------------------------------------------------------------------ music
+    // music
     // 4 bar loop (Am F C G), 118 BPM, driving four-on-the-floor with arpeggio and delay
     float kickT = 9, snT = 9, hatT = 9, hatOpen = 0, bassT = 9, bassF = 55, leadT = 9, leadF = 440, bassPh = 0, kickPh = 0,
           padPh[9] = {0}, leadPh = 0, bassLP = 0, padLP = 0, hhS = 0, snS = 0;
@@ -306,9 +304,8 @@ private:
     }
 };
 
-// ---------------------------------------------------------------------------
 // SDL wrapper (compiled out for offline tests)
-// ---------------------------------------------------------------------------
+
 #ifdef SDL_h_
 class Audio {
 public:

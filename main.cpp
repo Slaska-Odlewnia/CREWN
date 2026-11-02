@@ -1,5 +1,3 @@
-// CREWN - a retro 3D racing game by Śląska Odlewnia
-// C++17 / SDL2 / OpenGL (fixed function) - Windows 10/11 (also builds on Linux/macOS)
 #define _CRT_SECURE_NO_WARNINGS
 #include <functional>
 #include <string>

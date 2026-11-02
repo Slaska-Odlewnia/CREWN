@@ -13,9 +13,7 @@ struct Col {
 };
 inline void setCol(const Col& c) { glColor4f(c.r, c.g, c.b, c.a); }
 
-// ---------------------------------------------------------------------------
 // textures
-// ---------------------------------------------------------------------------
 // ids of the mipmapped world textures, so the filter can be switched at runtime (1990s: no smoothing at all)
 inline std::vector<GLuint>& worldTextures() { static std::vector<GLuint> v; return v; }
 inline void setRetroFilter(bool retro) {
@@ -60,9 +58,7 @@ inline GLuint uploadTexture(const std::vector<uint8_t>& rgba, int w, int h, bool
     return id;
 }
 
-// ---------------------------------------------------------------------------
 // 3D camera helpers (no GLU dependency)
-// ---------------------------------------------------------------------------
 struct CamBasis { V3 pos, right, up, fwd; };
 
 inline void setPerspective(float fovyDeg, float aspect, float n, float f) {
@@ -89,9 +85,7 @@ inline CamBasis applyLookAt(const V3& eye, const V3& target) {
     return cb;
 }
 
-// ---------------------------------------------------------------------------
 // 2D view: integer-scaled logical pixels so the UI stays crisp at any resolution
-// ---------------------------------------------------------------------------
 struct View2D {
     int winW = 1280, winH = 720, k = 2;
     float W = 640, H = 360;
@@ -166,11 +160,10 @@ inline void disc(float cx, float cy, float r, int seg, const Col& c) {
     glEnd();
 }
 
-// ---------------------------------------------------------------------------
+
 // Bitmap font: classic 5x7 glyphs, plus hand-made Polish letters.
 // Two atlases are built: a crisp 1x one (small text) and a smoothed 4x one
 // (Scale2x applied twice) for big titles.
-// ---------------------------------------------------------------------------
 namespace fontdata {
 // columns, bit0 = top row. ASCII 32..126
 static const uint8_t g5x7[95][5] = {

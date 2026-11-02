@@ -1,4 +1,3 @@
-// CREWN - procedural, low-resolution textures (all original, generated in code)
 #pragma once
 #include "gfx.h"
 
